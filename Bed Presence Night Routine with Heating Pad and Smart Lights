@@ -97,33 +97,36 @@ action:
             entity_id: !input allow_helper
             state: "on"
         sequence:
-          - alias: "Fade out all selected lights"
-            service: light.turn_off
-            target: !input lights_to_turn_off
-            data:
-              transition: 3
-         - alias: "Quick reset heating pad (off then on)"
-  sequence:
-    - service: switch.turn_off
-      target:
-        entity_id: !input heating_pad_switch
-    - delay:
-        seconds: 1
-    - service: switch.turn_on
-      target:
-        entity_id: !input heating_pad_switch
-          - alias: "Turn on nightstand light dimmed"
-            service: light.turn_on
-            target:
-              entity_id: !input nightstand_light
-            data:
-              brightness_pct: 40
-              transition: 3
-          - alias: "Turn off allow helper to prevent re-triggering"
-            service: input_boolean.turn_off
-            target:
-              entity_id: !input allow_helper
+        - alias: "Fade out all selected lights"
+  service: light.turn_off
+  target: !input lights_to_turn_off
+  data:
+    transition: 3
 
+- alias: "Quick reset heating pad (off then on)"
+  service: switch.turn_off
+  target:
+    entity_id: !input heating_pad_switch
+
+- delay:
+    seconds: 1
+
+- service: switch.turn_on
+  target:
+    entity_id: !input heating_pad_switch
+
+- alias: "Turn on nightstand light dimmed"
+  service: light.turn_on
+  target:
+    entity_id: !input nightstand_light
+  data:
+    brightness_pct: 40
+    transition: 3
+
+- alias: "Turn off allow helper to prevent re-triggering"
+  service: input_boolean.turn_off
+  target:
+    entity_id: !input allow_helper
       # === Bed Presence Lost for 5 Minutes ===
       - conditions:
           - condition: trigger
